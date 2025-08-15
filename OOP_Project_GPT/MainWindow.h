@@ -18,6 +18,7 @@
 #include "GridScene.h"
 #include "WireItem.h"
 #include "AVdialog.h"
+#include "Circuit.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; };

@@ -100,7 +100,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
                 {
                     for(auto comp:components)
                     {
-                        if(comp.second->name==d.name())
+                        if(comp.second->name==d.name()&&comp.second!=cw)
                         {
                             QMessageBox::critical(this,"Duplicate Component","A component with this name already exists.");
                             return;
@@ -134,7 +134,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
                 {
                     for(auto comp:components)
                     {
-                        if(comp.second->name==d.Name())
+                        if(comp.second->name==d.Name()&&comp.second!=cw)
                         {
                             QMessageBox::critical(this,"Duplicate Component","A component with this name already exists.");
                             return;
