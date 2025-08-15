@@ -101,12 +101,14 @@
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="RunDialog.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AVdialog.h" />
     <QtMoc Include="AddCompDialog.h" />
     <ClInclude Include="HelperFunctions.h" />
     <QtMoc Include="RLCdialog.h" />
+    <QtMoc Include="RunDialog.h" />
     <ClInclude Include="WireItem.h" />
     <QtMoc Include="ComponentWidget.h" />
     <ClInclude Include="ComponentItem.h" />

@@ -68,6 +68,9 @@
     <QtMoc Include="AddCompDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="RunDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="RLCdialog.ui">
@@ -77,6 +80,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AddCompDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="RunDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

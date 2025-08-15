@@ -1,6 +1,4 @@
 <RCC>
     <qresource prefix="/MainWindow"/>
-    <qresource prefix="/componentIcons">
-        <file>Icons/Resistor_icon.png</file>
-    </qresource>
+    <qresource prefix="/componentIcons"/>
 </RCC>

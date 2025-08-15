@@ -14,6 +14,7 @@
 #include "ComponentItem.h"
 #include "AddCompDialog.h"
 #include "RLCdialog.h"
+#include "RunDialog.h"
 #include "GridScene.h"
 #include "WireItem.h"
 #include "AVdialog.h"
@@ -40,6 +41,7 @@ private slots:
     void on_actionadd_V_triggered();
     void on_actionadd_I_triggered();
     void on_actionadd_Component_triggered();
+    void on_actionRun_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -52,8 +54,8 @@ private:
     bool deleteMode=false;
     bool wireMode=false;
     QPointF pendingWireStart;
-    QList<WireItem*> wires;
-    QList<ComponentWidget*> components;
+    QMap<WireItem*,QVector<QPointF>> wires;
+    QVector<std::pair<ComponentItem*,ComponentWidget*>> components;
 };
 
 #endif // !MAINWINDOW_H

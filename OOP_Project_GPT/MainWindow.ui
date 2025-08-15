@@ -101,6 +101,7 @@
    <addaction name="actionadd_V"/>
    <addaction name="actionadd_I"/>
    <addaction name="actionadd_Component"/>
+   <addaction name="actionRun"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -136,12 +137,13 @@
       <x>296</x>
       <y>128</y>
       <width>128</width>
-      <height>48</height>
+      <height>72</height>
      </rect>
     </property>
     <property name="title">
      <string>2</string>
     </property>
+    <addaction name="actionRun"/>
    </widget>
    <addaction name="menu1"/>
    <addaction name="menu2"/>
@@ -174,6 +176,11 @@
   <action name="actionadd_Component">
    <property name="text">
     <string>add Component</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
    </property>
   </action>
  </widget>

@@ -5,7 +5,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class AddCompDialog; };
 QT_END_NAMESPACE
 
-class AddCompDialog : public QDialog,public Ui::AddCompDialog
+class AddCompDialog : public QDialog
 {
 	Q_OBJECT
 public:

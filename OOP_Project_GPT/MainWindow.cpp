@@ -37,7 +37,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
         int componentNum=1;
         cw->value="1k";
         for (auto component:components)
-            if(component->type()=="R")
+            if(component.second->type()=="R")
 				componentNum++;
         cw->name="R"+QString::number(componentNum);
         cw->setText(cw->type()+" "+cw->value+" "+cw->name);
@@ -47,7 +47,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
 		int componentNum=1;
 		cw->value="1u";
 		for(auto component:components)
-			if(component->type()=="C")
+			if(component.second->type()=="C")
 				componentNum++;
 		cw->name="C"+QString::number(componentNum);
 		cw->setText(cw->type()+" "+cw->value+" "+cw->name);
@@ -57,7 +57,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
 		int componentNum=1;
 		cw->value="1m";
 		for(auto component:components)
-			if(component->type()=="L")
+			if(component.second->type()=="L")
 				componentNum++;
 		cw->name="L"+QString::number(componentNum);
 		cw->setText(cw->type()+" "+cw->value+" "+cw->name);
@@ -67,7 +67,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
 		int componentNum=1;
 		cw->value="5";
 		for(auto component:components)
-			if(component->type()=="V")
+			if(component.second->type()=="V")
 				componentNum++;
 		cw->name="V"+QString::number(componentNum);
 		cw->setText(cw->type()+" DC"+cw->value+" "+cw->name);
@@ -77,7 +77,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
 		int componentNum=1;
 		cw->value="5";
 		for(auto component:components)
-			if(component->type()=="I")
+			if(component.second->type()=="I")
 				componentNum++;
 		cw->name="I"+QString::number(componentNum);
 		cw->setText(cw->type()+" DC"+cw->value+" "+cw->name);
@@ -87,7 +87,8 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
     scene->addItem(ci);
     ci->setPos(scenePos-QPointF(cw->width()/2,cw->height()/2));
     ci->snapToGrid();
-    components.append(cw);
+    components.append(std::make_pair(ci,cw));
+    qDebug()<<ci;
     if(type=="R"||type=="L"||type=="C")
     {
         connect(cw,&ComponentWidget::doubleClicked,this,[ci,cw,this]()
@@ -99,7 +100,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
                 {
                     for(auto comp:components)
                     {
-                        if(comp->name==d.name())
+                        if(comp.second->name==d.name())
                         {
                             QMessageBox::critical(this,"Duplicate Component","A component with this name already exists.");
                             return;
@@ -133,7 +134,7 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
                 {
                     for(auto comp:components)
                     {
-                        if(comp->name==d.Name())
+                        if(comp.second->name==d.Name())
                         {
                             QMessageBox::critical(this,"Duplicate Component","A component with this name already exists.");
                             return;
@@ -206,6 +207,16 @@ void MainWindow::on_actionadd_Component_triggered()
     }
 }
 
+void MainWindow::on_actionRun_triggered()
+{
+    RunDialog d;
+    d.ui->tabWidget->setCurrentIndex(0);
+    if(d.exec()==QDialog::Accepted)
+    {
+
+    }
+}
+
 QPointF MainWindow::snapToGrid(const QPointF& p) 
 {
     int g=scene->gridSize;
@@ -252,7 +263,7 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
                         }
                         WireItem* wire=new WireItem(pts);
                         scene->addItem(wire);
-                        wires.append(wire);
+                        wires.insert(wire,pts);
                         pendingWireStart=QPointF();
                     }
                     return true;
@@ -263,7 +274,7 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
                     if(it)
                     {
                         for(int i=0;i<components.size();i++)
-                            if(components[i]->pos()==it->pos())
+                            if(components[i].second->pos()==it->pos())
                             {
                                 components.erase(components.begin()+i);
                                 break;
@@ -324,72 +335,3 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
     }
     return QMainWindow::eventFilter(watched,ev);
 }
-
-//void MainWindow::exportNetlist() 
-//{
-//    const qreal threshold=8.0;
-//    struct Node { QPointF pos; QList<QString> terminals; };
-//    QList<Node> nodes;
-//    auto addPointNode=[&](const QPointF& p,const QString& term)
-//    {
-//        for(Node& n:nodes)
-//            if(QLineF(n.pos,p).length()<=threshold) 
-//            { 
-//                n.terminals.append(term); 
-//                return; 
-//            }
-//        Node n; n.pos=p; 
-//        n.terminals.append(term); 
-//        nodes.append(n);
-//    };
-//    for(WireItem* w:wires) if(w) 
-//    { 
-//        addPointNode(w->firstPoint(),QString("wire%1_A").arg((quintptr)w)); 
-//        addPointNode(w->lastPoint(),QString("wire%1_B").arg((quintptr)w)); 
-//    }
-//    for(ComponentItem* ci:components) if(ci) 
-//    {
-//        ComponentWidget* cw=qobject_cast<ComponentWidget*>(ci->widget()); if(!cw) continue;
-//        addPointNode(ci->pinPositionLeft(),QString("%1.%2").arg(cw->name.isEmpty()?cw->type():cw->name).arg("L"));
-//        addPointNode(ci->pinPositionRight(),QString("%1.%2").arg(cw->name.isEmpty()?cw->type():cw->name).arg("R"));
-//    }
-//    QStringList netlines;
-//    for(int i=0;i<nodes.size();++i) 
-//    {
-//        QString netname=QString("N%1").arg(i+1);
-//        for(const QString& t:nodes[i].terminals) netlines.append(QString("%1 -> %2").arg(netname,t));
-//    }
-//    QStringList comps;
-//    for(ComponentItem* ci:components) if(ci) 
-//    {
-//        ComponentWidget* cw=qobject_cast<ComponentWidget*>(ci->widget()); 
-//        if(!cw) 
-//            continue;
-//        QPointF left=ci->pinPositionLeft();
-//        QPointF right=ci->pinPositionRight(); 
-//        int leftNet=-1,rightNet=-1;
-//        for(int i=0;i<nodes.size();++i) 
-//        { 
-//            if(QLineF(nodes[i].pos,left).length()<=threshold) 
-//                leftNet=i; 
-//            if(QLineF(nodes[i].pos,right).length()<=threshold) 
-//                rightNet=i; 
-//        }
-//        QString nL=leftNet>=0?QString("N%1").arg(leftNet+1):"NC";
-//        QString nR=rightNet>=0?QString("N%1").arg(rightNet+1):"NC";
-//        QString nm=cw->name.isEmpty()?cw->type():cw->name;
-//        comps.append(QString("%1 %2 %3 %4").arg(cw->type(),nm,nL,nR)+(cw->value.isEmpty()?"":" "+cw->value));
-//    }
-//    QString out;
-//    out+="Nets and attachments\n"+netlines.join('\n')+"\n";
-//    out+="Components"+comps.join('\n') + "\n";
-//    QString fname=QFileDialog::getSaveFileName(this,"Export Netlist","netlist.sp","SPICE Netlist (*.sp);;Text Files (*.txt)");
-//    if(fname.isEmpty()) 
-//        return;
-//    QFile f(fname);
-//    if(!f.open(QIODevice::WriteOnly|QIODevice::Text)) 
-//        return;
-//    QTextStream ts(&f);
-//    ts<<out;
-//    f.close();
-//}
