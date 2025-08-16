@@ -1,7 +1,7 @@
 #ifndef COMPONENT_ITEM
 #define COMPONENT_ITEM
 #include <QGraphicsProxyWidget>
-#include <ComponentWidget.h>
+#include "ComponentWidget.h"
 class ComponentItem : public QGraphicsProxyWidget 
 {
 public:

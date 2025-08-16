@@ -88,7 +88,6 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
     ci->setPos(scenePos-QPointF(cw->width()/2,cw->height()/2));
     ci->snapToGrid();
     components.append(std::make_pair(ci,cw));
-    qDebug()<<ci;
     if(type=="R"||type=="L"||type=="C")
     {
         connect(cw,&ComponentWidget::doubleClicked,this,[ci,cw,this]()
@@ -164,6 +163,25 @@ void MainWindow::placeComponent(const QString& type,const QPointF& scenePos)
     }
 }
 
+void MainWindow::placeLabelNet(const QString& name,const QPointF& scenePos)
+{
+    LabelNetWidget* lnw=new LabelNetWidget(name);
+    LabelNetItem* lni=new LabelNetItem(lnw);
+    scene->addItem(lni);
+    lni->setPos(scenePos-QPointF(lnw->width()/2,lnw->height()/2));
+    labelNets.append(std::make_pair(lni,lnw));
+    connect(lnw,&LabelNetWidget::doubleClicked,this,[lni,lnw,this]()
+        {
+            LabelNetDialog d;
+            d.ui->LabelNet_edit->setText(lnw->name());
+            if(d.exec()==QDialog::Accepted)
+            {
+                lnw->setName(d.ui->LabelNet_edit->text());
+                lnw->setText(lnw->name());
+            }
+        });
+}
+
 void MainWindow::on_actionadd_R_triggered()
 {
     QPointF x(200,200);
@@ -207,6 +225,15 @@ void MainWindow::on_actionadd_Component_triggered()
     }
 }
 
+void MainWindow::on_actionadd_LabelNet_triggered()
+{
+    LabelNetDialog d;
+    if(d.exec()==QDialog::Accepted)
+    {
+        placeLabelNet(d.ui->LabelNet_edit->text(),QPointF(200,200));
+    }
+}
+
 void MainWindow::on_actionRun_triggered()
 {
     RunDialog d;
@@ -238,6 +265,7 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
             QPointF scenePt=ui->view->mapToScene(me->pos());
             QGraphicsItem* clickedItem=scene->itemAt(scenePt,ui->view->transform());
             ComponentItem* ci=nullptr;
+            LabelNetItem* ln=nullptr;
             if(me->button()==Qt::LeftButton)
             {
                 if(wireMode)
@@ -263,7 +291,7 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
                         }
                         WireItem* wire=new WireItem(pts);
                         scene->addItem(wire);
-                        wires.insert(wire,pts);
+                        wires.append(std::make_pair(wire,pts));
                         pendingWireStart=QPointF();
                     }
                     return true;
@@ -294,6 +322,14 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
                         dragOffset=scenePt-ci->pos();
                         return true;
                     }
+                    for(QGraphicsItem* p=clickedItem;p&&!ln;p=p->parentItem())
+                        ln=dynamic_cast<LabelNetItem*>(p);
+                    if(ln&&ln->flags().testFlag(QGraphicsItem::ItemIsMovable))
+                    {
+                        draggedItem=ln;
+                        dragOffset=scenePt-ln->pos();
+                        return true;
+                    }
                 }
             }
             else if(me->button()==Qt::RightButton)
@@ -320,6 +356,12 @@ bool MainWindow::eventFilter(QObject* watched,QEvent* ev)
                     QPointF scenePt=ui->view->mapToScene(mm->pos());
                     draggedItem->setPos(scenePt-dragOffset);
                     ci->snapToGrid();
+                }
+                else if(auto* ln=dynamic_cast<LabelNetItem*>(draggedItem))
+                {
+                    QMouseEvent* mm=static_cast<QMouseEvent*>(ev);
+                    QPointF scenePt=ui->view->mapToScene(mm->pos());
+                    draggedItem->setPos(scenePt-dragOffset);
                 }
                 draggedItem=nullptr;
                 return true;

@@ -96,6 +96,7 @@
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="AddCompDialog.ui" />
     <QtUic Include="AVdialog.ui" />
+    <QtUic Include="LabelNetDialog.ui" />
     <QtUic Include="RLCdialog.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
@@ -116,6 +117,9 @@
     <QtMoc Include="RLCdialog.h" />
     <QtMoc Include="RunDialog.h" />
     <ClInclude Include="Inductor.h" />
+    <QtMoc Include="LabelNetDialog.h" />
+    <ClInclude Include="LabelNetItem.h" />
+    <QtMoc Include="LabelNetWidget.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Resistor.h" />
     <ClInclude Include="VoltageSource.h" />

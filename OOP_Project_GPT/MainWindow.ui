@@ -101,6 +101,7 @@
    <addaction name="actionadd_V"/>
    <addaction name="actionadd_I"/>
    <addaction name="actionadd_Component"/>
+   <addaction name="actionadd_LabelNet"/>
    <addaction name="actionRun"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -118,7 +119,7 @@
       <x>275</x>
       <y>128</y>
       <width>138</width>
-      <height>192</height>
+      <height>216</height>
      </rect>
     </property>
     <property name="title">
@@ -130,6 +131,7 @@
     <addaction name="actionadd_V"/>
     <addaction name="actionadd_I"/>
     <addaction name="actionadd_Component"/>
+    <addaction name="actionadd_LabelNet"/>
    </widget>
    <widget class="QMenu" name="menu2">
     <property name="geometry">
@@ -181,6 +183,11 @@
   <action name="actionRun">
    <property name="text">
     <string>Run</string>
+   </property>
+  </action>
+  <action name="actionadd_LabelNet">
+   <property name="text">
+    <string>add LabelNet</string>
    </property>
   </action>
  </widget>

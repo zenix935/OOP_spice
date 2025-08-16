@@ -6,6 +6,7 @@
 #include <QtMath>
 class WireItem : public QGraphicsItem {
 public:
+    QString name;
     WireItem(const QVector<QPointF>& scenePoints) 
     {
         if(scenePoints.isEmpty()) 

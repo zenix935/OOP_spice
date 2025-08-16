@@ -10,9 +10,12 @@
 #include <QDrag>
 #include "HelperFunctions.h"
 #include "ComponentWidget.h"
+#include "LabelNetWidget.h"
+#include "LabelNetDialog.h"
 #include "ui_MainWindow.h"
 #include "ComponentItem.h"
 #include "AddCompDialog.h"
+#include "LabelNetItem.h"
 #include "RLCdialog.h"
 #include "RunDialog.h"
 #include "GridScene.h"
@@ -42,11 +45,13 @@ private slots:
     void on_actionadd_V_triggered();
     void on_actionadd_I_triggered();
     void on_actionadd_Component_triggered();
+    void on_actionadd_LabelNet_triggered();
     void on_actionRun_triggered();
 
 private:
     Ui::MainWindow *ui;
     void placeComponent(const QString& type,const QPointF& scenePos);
+    void placeLabelNet(const QString& name,const QPointF& scenePos);
     QPointF snapToGrid(const QPointF& p);
     GridScene* scene=nullptr;
     QPushButton* deleteModeButton=nullptr;
@@ -55,8 +60,9 @@ private:
     bool deleteMode=false;
     bool wireMode=false;
     QPointF pendingWireStart;
-    QMap<WireItem*,QVector<QPointF>> wires;
+    QVector<std::pair<WireItem*,QVector<QPointF>>> wires;
     QVector<std::pair<ComponentItem*,ComponentWidget*>> components;
+    QVector<std::pair<LabelNetItem*,LabelNetWidget*>> labelNets;
 };
 
 #endif // !MAINWINDOW_H
