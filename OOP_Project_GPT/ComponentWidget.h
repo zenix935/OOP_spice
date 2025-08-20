@@ -9,7 +9,7 @@ public:
     {
         setText(type);
         setAlignment(Qt::AlignCenter);
-        setFixedSize(60,40);
+        setFixedSize(62,42);
         setAttribute(Qt::WA_StyledBackground);
         setStyleSheet("QLabel{background:#070707;border:1px solid #333;border-radius:1px;}");
         setContextMenuPolicy(Qt::DefaultContextMenu);

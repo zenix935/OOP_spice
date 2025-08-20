@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="LabelNet_label">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Label Name:</string>
        </property>
       </widget>
      </item>

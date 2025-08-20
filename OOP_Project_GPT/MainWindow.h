@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets/QMainWindow>
+#include <QRegularExpression>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QMimeData>
@@ -47,10 +48,14 @@ private slots:
     void on_actionadd_Component_triggered();
     void on_actionadd_LabelNet_triggered();
     void on_actionRun_triggered();
+    void on_actionSave_triggered();
+    void on_actionOpen_triggered();
+    void on_actionNew_triggered();
 
 private:
     Ui::MainWindow *ui;
-    void placeComponent(const QString& type,const QPointF& scenePos);
+    void placeComponent(const QString& type,const QPointF& scenePos,const QString& name,const QString& value
+        ,const QString& phase,const QString& frequency);
     void placeLabelNet(const QString& name,const QPointF& scenePos);
     QPointF snapToGrid(const QPointF& p);
     GridScene* scene=nullptr;

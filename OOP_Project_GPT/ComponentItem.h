@@ -16,8 +16,8 @@ public:
     void snapToGrid() 
     {
         QPointF p=pos();
-        qreal x=std::round(p.x()/grid)*grid;
-        qreal y=std::round(p.y()/grid)*grid;
+        qreal x=std::round(p.x()/grid)*grid-1;
+        qreal y=std::round(p.y()/grid)*grid-1;
         setPos(x,y);
     }
     void rotateCW() { setRotation(rotation()+90); }
